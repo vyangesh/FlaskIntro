@@ -1,22 +1,18 @@
-from flask import Flask, render_template, url_for
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from flask import Flask
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///test.db'
-db = SQLAlchemy(app)
+#imported modules
 
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    content = db.Column(db.String(200), nullable = False)
-    date_created = db.Column(db.DateTime, default = datetime.utcnow)
+app = Flask(__name__)#created Flask object. This will tell Flask where to look for resources.
 
-    def __repr__(self):
-        return '<Task %r>' % self.id
 
-@app.route('/', methods = ['POST', 'GET'])
+@app.route('/')
+#This will tell Flask what URL to use to trigger the function.
+
+
+#The function below returns HTML by default. So the string in return statement will reder as HTML
 def index():
-    return render_template('index.html')
+    return "<h1>Hello, world</h>"
 
+#the below will be used for debuggging
 if __name__=="__main__":
     app.run(debug=True)
