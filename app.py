@@ -38,8 +38,9 @@ class Todo(db.Model):
 
 
 
-@app.route('/')
+@app.route('/', methods=['POST','GET'])
 #This will tell Flask what URL to use to trigger the function.
+#Added methods that we can use. By default we use only GET, but now we can even post on the webpage
 
 
 
