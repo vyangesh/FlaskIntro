@@ -46,7 +46,7 @@ class Todo(db.Model):
 
 #The function below returns the template passed through it. It does not require the entire path to the file index.html
 #because of the folder name given to the "templates", it knows to look into that folder.
-#if we are POSTing then then we will show something and if we are not then we get the regular page
+#if we are POSTing then then we will show insert contents to test.db and if we are not then we retrive the page with the test.db tasks
 def index():
     if request.method == 'POST':
         task_content = request.form['content']#getting the contents from the webpage
