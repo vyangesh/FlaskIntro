@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -40,14 +40,29 @@ class Todo(db.Model):
 
 @app.route('/', methods=['POST','GET'])
 #This will tell Flask what URL to use to trigger the function.
-#Added methods that we can use. By default we use only GET, but now we can even post on the webpage
+#Added methods that we can use. By default we use only GET, but now we can even POST on the webpage
 
 
 
 #The function below returns the template passed through it. It does not require the entire path to the file index.html
 #because of the folder name given to the "templates", it knows to look into that folder.
+#if we are POSTing then then we will show something and if we are not then we get the regular page
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        task_content = request.form['content']#getting the contents from the webpage
+        new_task = Todo(content=task_content)#created an object under class Todo by passing the content(a column in the DB)
+
+        try:
+            db.session.add(new_task)#inserting a new row to the existing DB test.db
+            db.session.commit()#saving changes in the test.db
+            return redirect('/')#redirected to the page
+        except:
+            return 'There was an error while adding your task'
+
+    else:
+        tasks = Todo.query.order_by(Todo.date_created).all()#This will return all the content from test.db and display it in order they were created
+        return render_template('index.html', tasks=tasks)#here we set the "tasks" in the index.html to tasks that we created in the line above
+
 
 #the below will be used for debuggging
 if __name__=="__main__":
