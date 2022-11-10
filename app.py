@@ -1,6 +1,7 @@
-from flask import Flask, render_template, url_for, request, redirect
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+
+from flask import Flask, redirect, render_template, request, url_for
+from flask_sqlalchemy import SQLAlchemy
 
 #imported modules
 
@@ -77,9 +78,25 @@ def delete(id):
         db.session.commit()
         return redirect('/')
     except:
-        return "There was an issue while deleting this task"
-    
-    
+        return "There was an issue while deleting this task."
+
+#Rerouting to update
+@app.route('/update/<int:id>', methods=['POST','GET'])
+
+#Below function will grab the task id and update it in test.db
+#If successfully deleted it will redirect to the home page
+#else it will show an error
+def update(id):
+    task_to_update = Todo.query.get_or_404(id)
+    if request.method == 'POST':
+        try:
+            task_to_update.content = request.form['content']
+            db.session.commit()
+            return redirect('/')
+        except:
+            return "There was a problem updating the task."
+    else:
+        return render_template('update.html', task=task_to_update)
 
 
 
