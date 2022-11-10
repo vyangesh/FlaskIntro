@@ -63,6 +63,25 @@ def index():
         tasks = Todo.query.order_by(Todo.date_created).all()#This will return all the content from test.db and display it in order they were created
         return render_template('index.html', tasks=tasks)#here we set the "tasks" in the index.html to tasks that we created in the line above
 
+#for deleteing we need to re-route it to /delete/id from test.db which is the primary key of the task
+@app.route('/delete/<int:id>')
+
+#below function will fetch the task id and delete it from test.db.
+#If successfully deleted it will redirect to the home page
+#else it will show an error
+def delete(id):
+    task_to_delete = Todo.query.get_or_404(id)
+
+    try:
+        db.session.delete(task_to_delete)
+        db.session.commit()
+        return redirect('/')
+    except:
+        return "There was an issue while deleting this task"
+    
+    
+
+
 
 #the below will be used for debuggging
 if __name__=="__main__":
